@@ -1,12 +1,8 @@
 import { startOnboardingSession } from './session'
 
-// Lets put all the variables needed for all modules in the global scope
-const localServerUrl= import.meta.env.VITE_LOCAL_SERVER_URL;
-
 let incode;
 let incodeSession;
 const container = document.getElementById("camera-container");
-
 
 function showError(e=null) {
   container.innerHTML = "<h1>There was an error</h1>";

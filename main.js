@@ -1,4 +1,4 @@
-import { startOnboardingSession } from './session'
+import { startOnboardingSession, finishOnboardingSession } from './incode'
 
 let incode;
 let incodeSession;
@@ -9,9 +9,15 @@ function showError(e=null) {
   console.log(e.message)
 }
 
-function captureIdFrontSide() {
+function saveDeviceData() {
+  incode.sendGeolocation({ token: incodeSession.token });
+  incode.sendFingerprint({ token: incodeSession.token });
+  captureFrontId();
+}
+
+function captureFrontId() {
   incode.renderCamera("front", container, {
-    onSuccess: captureIdBackSide,
+    onSuccess: captureBackId,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
@@ -19,7 +25,7 @@ function captureIdFrontSide() {
   });
 }
 
-function captureIdBackSide() {
+function captureBackId() {
   incode.renderCamera("back", container, {
     onSuccess: processId,
     onError: showError,
@@ -47,17 +53,10 @@ function captureSelfie() {
   });
 }
 
-function saveDeviceData() {
-    incode.sendGeolocation({ token: incodeSession.token });
-    incode.sendFingerprint({ token: incodeSession.token });
-    captureIdFrontSide();
-}
+
 
 function finishOnboarding() {
-  // Finishing the session works along with the configuration in the flow
-  // webhooks and business rules are ran here.
-  incode
-    .getFinishStatus(null, { token: incodeSession.token })
+  finishOnboardingSession(incodeSession.token)
     .then((response) => {
         console.log(response);
         const container = document.getElementById("finish-container");

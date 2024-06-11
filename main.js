@@ -56,6 +56,8 @@ function captureSelfie() {
 
 
 function finishOnboarding() {
+  // Finishing the session works along with the configuration in the flow
+  // webhooks and business rules are ran here.
   finishOnboardingSession(incodeSession.token)
     .then((response) => {
         console.log(response);

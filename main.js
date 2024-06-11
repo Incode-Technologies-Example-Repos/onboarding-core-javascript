@@ -1,4 +1,4 @@
-import { startOnboardingSession, finishOnboardingSession } from './incode'
+import { startOnboardingSession, finishOnboardingSession } from './session'
 
 let incode;
 let incodeSession;
@@ -12,12 +12,12 @@ function showError(e=null) {
 function saveDeviceData() {
   incode.sendGeolocation({ token: incodeSession.token });
   incode.sendFingerprint({ token: incodeSession.token });
-  captureFrontId();
+  captureIdFrontSide();
 }
 
-function captureFrontId() {
+function captureIdFrontSide() {
   incode.renderCamera("front", container, {
-    onSuccess: captureBackId,
+    onSuccess: captureIdBackSide,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
@@ -25,7 +25,7 @@ function captureFrontId() {
   });
 }
 
-function captureBackId() {
+function captureIdBackSide() {
   incode.renderCamera("back", container, {
     onSuccess: processId,
     onError: showError,

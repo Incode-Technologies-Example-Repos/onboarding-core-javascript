@@ -26,7 +26,6 @@ function captureIdFrontSide() {
 }
 
 function captureIdBackSide(response) {
-  console.log(response);
   incode.renderCamera("back", container, {
     onSuccess: processId,
     onError: showError,
@@ -79,7 +78,6 @@ async function app() {
     container.innerHTML = "<h1>Creating session...</h1>";
     try {
         incodeSession = await fakeBackendStart();
-        console.log(incodeSession);
     } catch(e) {
         showError(e);
         return;

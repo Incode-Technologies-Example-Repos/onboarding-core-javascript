@@ -1,4 +1,4 @@
-import { startOnboardingSession, finishOnboardingSession } from './session'
+import { fakeBackendStart, fakeBackendFinish } from './fake_backend'
 
 let incode;
 let incodeSession;
@@ -25,7 +25,7 @@ function captureIdFrontSide() {
   });
 }
 
-function captureIdBackSide() {
+function captureIdBackSide(response) {
   incode.renderCamera("back", container, {
     onSuccess: processId,
     onError: showError,
@@ -53,12 +53,10 @@ function captureSelfie() {
   });
 }
 
-
-
 function finishOnboarding() {
   // Finishing the session works along with the configuration in the flow
   // webhooks and business rules are ran here.
-  finishOnboardingSession(incodeSession.token)
+  fakeBackendFinish(incodeSession.token)
     .then((response) => {
         console.log(response);
         const container = document.getElementById("finish-container");
@@ -70,8 +68,7 @@ function finishOnboarding() {
 }
 
 async function app() {
-  try {
-    // Create the instance of incode linked to a client
+  try { 
     const apiURL = import.meta.env.VITE_API_URL;
     incode = window.OnBoarding.create({
       apiURL: apiURL
@@ -80,7 +77,7 @@ async function app() {
     // Create the single session
     container.innerHTML = "<h1>Creating session...</h1>";
     try {
-        incodeSession = await startOnboardingSession();
+        incodeSession = await fakeBackendStart();
     } catch(e) {
         showError(e);
         return;

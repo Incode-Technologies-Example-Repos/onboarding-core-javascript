@@ -21,7 +21,14 @@ function captureIdFrontSide() {
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
-    showTutorial: true
+    showTutorial: true,
+    onRestartOnboarding: () => {
+      console.log('Clicked Retry');
+      container.innerHTML="";
+      captureIdFrontSide();
+      document.querySelector('.ReactModalPortal').remove();
+    },
+    showCustomCameraPermissionScreen: true,
   });
 }
 
@@ -31,7 +38,7 @@ function captureIdBackSide(response) {
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
-    showTutorial: true
+    showTutorial: true,
   });
 }
 
@@ -49,7 +56,7 @@ function captureSelfie() {
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
-    showTutorial: true
+    showTutorial: true,
   });
 }
 
@@ -85,7 +92,8 @@ async function app() {
 
     // Empty the container and start the flow
     container.innerHTML = "";
-    saveDeviceData();
+    //saveDeviceData();
+    captureIdFrontSide();
   } catch (e) {
     console.dir(e);
     container.innerHTML = "<h1>Something Went Wrong</h1>";

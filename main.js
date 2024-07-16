@@ -27,6 +27,10 @@ function captureIdFrontSide() {
       container.innerHTML="";
       captureIdFrontSide();
       document.querySelector('.ReactModalPortal').remove();
+      document.querySelector(".ReactModal__Body--open").classList.remove("ReactModal__Body--open");
+      document.querySelector('body').removeAttribute("style");
+      document.querySelectorAll('[data-react-modal-body-trap]').forEach((elem) => elem.remove());
+      document.querySelector('portal').remove();
     },
     showCustomCameraPermissionScreen: true,
   });

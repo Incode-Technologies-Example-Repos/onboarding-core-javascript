@@ -45,7 +45,7 @@ async function  processId() {
 
 function captureSelfie() {
   incode.renderCamera("selfie", container, {
-    onSuccess: finishOnboarding,
+    onSuccess: captureVideoSelfie,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
@@ -53,17 +53,32 @@ function captureSelfie() {
   });
 }
 
+function captureVideoSelfie(){
+  incode.renderVideoSelfie( container, {
+    token: incodeSession,
+    showTutorial: true,
+    modules: ["selfie", "front", "back", "speech"], // you can add 'poa' and 'questions'
+    speechToTextCheck: true, // this is the check for the speech
+  },
+  {
+    onSuccess: finishOnboarding,
+    onError: showError,
+    numberOfTries: 3,
+  }
+);
+}
+
 function finishOnboarding() {
   // Finishing the session works along with the configuration in the flow
   // webhooks and business rules are ran here.
   fakeBackendFinish(incodeSession.token)
     .then((response) => {
-        console.log(response);
-        const container = document.getElementById("finish-container");
-        container.innerHTML = "<h1>Onboarding Finished.</h1>";
+      console.log(response);
+      const container = document.getElementById("finish-container");
+      container.innerHTML = "<h1>Onboarding Finished.</h1>";
     })
     .catch((error) => {
-        showError(error);
+      showError(error);
     });  
 }
 
@@ -77,12 +92,12 @@ async function app() {
     // Create the single session
     container.innerHTML = "<h1>Creating session...</h1>";
     try {
-        incodeSession = await fakeBackendStart();
+      incodeSession = await fakeBackendStart();
     } catch(e) {
-        showError(e);
-        return;
+      showError(e);
+      return;
     }
-
+    
     // Empty the container and start the flow
     container.innerHTML = "";
     saveDeviceData();

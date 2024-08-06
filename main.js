@@ -57,7 +57,7 @@ function captureVideoSelfie(){
   incode.renderVideoSelfie( container, {
     token: incodeSession,
     showTutorial: true,
-    modules: ["selfie", "front", "back", "speech"], // you can add 'poa' and 'questions'
+    modules: ["front", "back", "selfie", "speech"], // you can add 'poa' and 'questions'
     speechToTextCheck: true, // this is the check for the speech
   },
   {

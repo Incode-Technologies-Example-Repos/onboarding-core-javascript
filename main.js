@@ -66,11 +66,11 @@ function captureVideoSelfie(){
       showTutorial: showTutorialsFlag,
       modules: ["front", "back", "selfie", "speech"], // you can add 'poa' and 'questions'
       speechToTextCheck: true, // this is the check for the speech
-      numberOfTries: 1,
     },
     {
       onSuccess: finishOnboarding,
-      onError: showVideoSelfieError
+      onError: showVideoSelfieError,
+      numberOfTries: 1, // Only works for text-to-speech
     }
   );
 }

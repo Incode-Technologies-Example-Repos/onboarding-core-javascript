@@ -18,7 +18,6 @@ function showError(e=null) {
 function saveDeviceData() {
   incode.sendGeolocation({ token: incodeSession.token });
   incode.sendFingerprint({ token: incodeSession.token });
-  //captureVideoSelfie();
   captureIdFrontSide();
 }
 
@@ -52,7 +51,7 @@ async function  processId() {
 
 function captureSelfie() {
   incode.renderCamera("selfie", cameraContainer, {
-    onSuccess: captureVideoSelfie,
+    onSuccess: finishOnboarding, // change this for captureVideoSelfie if you want to enable it
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,

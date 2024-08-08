@@ -51,7 +51,7 @@ async function  processId() {
 
 function captureSelfie() {
   incode.renderCamera("selfie", cameraContainer, {
-    onSuccess: finishOnboarding, // change this for captureVideoSelfie if you want to enable it
+    onSuccess: captureVideoSelfie, // change this for captureVideoSelfie if you want to enable it
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,

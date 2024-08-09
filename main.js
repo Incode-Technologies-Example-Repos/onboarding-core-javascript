@@ -86,7 +86,8 @@ async function app() {
   try { 
     const apiURL = import.meta.env.VITE_API_URL;
     incode = window.OnBoarding.create({
-      apiURL: apiURL
+      apiURL: apiURL,
+      lang: "en"
     });
     
     // Create the single session

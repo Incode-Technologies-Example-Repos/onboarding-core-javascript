@@ -14,6 +14,8 @@ const fakeBackendStart = async function() {
     const url = `${apiurl}/omni/start`;
     const params = {
         configurationId: flowid,
+        // language: "pt-BR",
+        // language: "es-ES",
         // language: "en-US",
         // redirectionUrl: "https://example.com?custom_parameter=some+value",
         // externalCustomerId: "the id of the customer in your system",

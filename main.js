@@ -2,7 +2,7 @@ import { fakeBackendStart, fakeBackendFinish } from './fake_backend'
 
 let incode;
 let incodeSession;
-let showTutorialsFlag=false;
+let showTutorialsFlag=true;
 const cameraContainer = document.getElementById("camera-container");
 
 function showError(e=null) {
@@ -51,37 +51,12 @@ async function  processId() {
 
 function captureSelfie() {
   incode.renderCamera("selfie", cameraContainer, {
-    onSuccess: captureVideoSelfie, // change this for captureVideoSelfie if you want to enable it
+    onSuccess: finishOnboarding,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
     showTutorial: showTutorialsFlag
   });
-}
-
-function captureVideoSelfie(){
-  incode.renderVideoSelfie( cameraContainer, {
-      token: incodeSession,
-      showTutorial: showTutorialsFlag,
-      modules: ["front", "back", "selfie", "speech"], // you can add 'poa' and 'questions'
-      speechToTextCheck: true, // this is the check for the speech
-    },
-    {
-      onSuccess: finishOnboarding,
-      onError: showVideoSelfieError,
-      numberOfTries: 1, // Only works for text-to-speech
-    }
-  );
-}
-
-function showVideoSelfieError(errors=[]) {
-  let error_string="<h1>There was some errors</h1>\n<ul>\n";
-  for (let i=0; i<errors.length;i++){
-    error_string +=`  <li>${errors[i]}</li>\n`
-  }
-  error_string+="</ul>"
-  const finishContainer = document.getElementById("finish-container");
-  finishContainer.innerHTML = error_string;
 }
 
 function finishOnboarding() {

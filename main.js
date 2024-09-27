@@ -1,4 +1,4 @@
-import { fakeBackendStart, fakeBackendFinish } from './fake_backend'
+import { fakeBackendStart, fakeBackendFinish, fakeBackendGovernmentValidation } from './fake_backend'
 
 let incode;
 let incodeSession;
@@ -45,13 +45,25 @@ async function  processId() {
 
 function captureSelfie() {
   incode.renderCamera("selfie", container, {
-    onSuccess: finishOnboarding,
+    onSuccess: governmentValidation,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
     showTutorial: true
   });
 }
+function governmentValidation() {
+  // Finishing the session works along with the configuration in the flow
+  // webhooks and business rules are ran here.
+  fakeBackendGovernmentValidation(incodeSession.token)
+    .then((response) => {
+       finishOnboarding();
+    })
+    .catch((error) => {
+        showError(error);
+    });  
+}
+
 
 function finishOnboarding() {
   // Finishing the session works along with the configuration in the flow

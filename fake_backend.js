@@ -35,6 +35,27 @@ const fakeBackendStart = async function() {
 }
 
 // Finishes the session started at /start
+const fakeBackendGovernmentValidation = async function(token) {
+    const url = `${apiurl}/omni/process/government-validation`; 
+
+    let sessionHeaders = {...defaultHeader};
+    sessionHeaders['X-Incode-Hardware-Id'] = token;
+    
+    let response;
+    try {
+        response = await fetch(url, {method: 'GET', headers: sessionHeaders});
+        if (!response.ok) {
+            throw new Error('Request failed with code ' + response.status)
+        }
+    } catch(e) {
+        throw new Error('HTTP Post Error: ' + e.message)
+    }
+    console.log(await response.json());
+    //const {redirectionUrl, action} = await response.json();
+    //return {redirectionUrl, action};
+}
+
+// Finishes the session started at /start
 const fakeBackendFinish = async function(token) {
     const url = `${apiurl}/omni/finish-status`; 
 
@@ -54,4 +75,4 @@ const fakeBackendFinish = async function(token) {
     return {redirectionUrl, action};
 }
 
-export {fakeBackendStart, fakeBackendFinish};
+export {fakeBackendStart, fakeBackendFinish, fakeBackendGovernmentValidation};

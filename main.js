@@ -36,7 +36,6 @@ function captureIdBackSide(response) {
   if (skipBackIdCapture) {
     processId();
   } else {
-    console.log("captureIdBackSide", response);
     incode.renderCamera("back", cameraContainer, {
       onSuccess: processId,
       onError: showError,

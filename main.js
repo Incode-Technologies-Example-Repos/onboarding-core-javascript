@@ -1,4 +1,5 @@
 import { fakeBackendStart, fakeBackendFinish } from "./fake_backend";
+const consentId = import.meta.env.VITE_CONSENT_ID;
 
 let incode;
 let incodeSession;
@@ -13,6 +14,14 @@ function showError(e = null) {
     finishContainer.innerHTML = "<h1>There was an error</h1>";
     console.log(e);
   }
+}
+
+function captureCombinedConsent() {
+  incode.renderCombinedConsent(cameraContainer, {
+    token: incodeSession,
+    onSuccess: saveDeviceData,
+    consentId: consentId, // id of a consent created in dashboard
+  });
 }
 
 function saveDeviceData() {
@@ -88,7 +97,7 @@ async function app() {
     incodeSession = await fakeBackendStart();
     // Empty the container and start the flow
     cameraContainer.innerHTML = "";
-    saveDeviceData();
+    captureCombinedConsent();
   } catch (e) {
     showError(e);
   }

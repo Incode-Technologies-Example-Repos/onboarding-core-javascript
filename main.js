@@ -15,11 +15,12 @@ function showError(e = null) {
     console.log(e);
   }
 }
+
 function captureCombinedConsent() {
   incode.renderCombinedConsent(cameraContainer, {
     token: incodeSession,
     onSuccess: saveDeviceData,
-    consentId: consentId, // id of a consent created in dashboard 
+    consentId: consentId, // id of a consent created in dashboard
   });
 }
 

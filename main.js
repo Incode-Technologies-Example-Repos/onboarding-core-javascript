@@ -79,7 +79,7 @@ async function processId() {
 // 6.- Capture the selfie
 function captureSelfie() {
   incode.renderCamera("selfie", cameraContainer, {
-    onSuccess: processFace,
+    onSuccess: finishOnboarding,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
@@ -87,15 +87,7 @@ function captureSelfie() {
   });
 }
 
-// 7.- Process the Selfie
-async function processFace() {
-  await incode.processFace({
-    token: incodeSession.token,
-  });
-  finishOnboarding();
-}
-
-// 8.- Finish the onboarding
+// 7.- Finish the onboarding
 function finishOnboarding() {
   fakeBackendFinish(incodeSession.token)
     .then((response) => {

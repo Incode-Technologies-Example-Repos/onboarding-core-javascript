@@ -15,8 +15,8 @@ function showError(e = null) {
     console.log(e);
   }
 }
-// 1.- Check is mandatory consent is required if it is show it.
-function mandatoryConsent() {
+// 1.- Check if mandatory consent is required if it is show it.
+function checkMandatoryConsent() {
   incode.sendFingerprint({ token: incodeSession.token }).then((response) => {
     // Send fingerprint returns a response with the following structure:
     //   {
@@ -31,7 +31,7 @@ function mandatoryConsent() {
     if (response?.showMandatoryConsent) {
       incode.renderMandatoryConsent(cameraContainer, {
         token: incodeSession,
-        onSuccess: captureCombinedConsent(),
+        onSuccess: captureCombinedConsent,
         onCancel: () => showError("Mandatory consent was denied"),
         regulationType: response.regulationType,
       });
@@ -123,7 +123,7 @@ async function app() {
     cameraContainer.innerHTML = "";
 
     // Start the onboarding flow with mandatory consent
-    mandatoryConsent();
+   checkMandatoryConsent();
   } catch (e) {
     showError(e);
   }

@@ -15,7 +15,7 @@ function showError(e = null) {
     console.log(e);
   }
 }
-// 1.- Check if mandatory consent is required if it is show it.
+// 1.- Check if mandatory consent is required and show if it is.
 function checkMandatoryConsent() {
   incode.sendFingerprint({ token: incodeSession.token }).then((response) => {
     // Send fingerprint returns a response with the following structure:
@@ -52,7 +52,7 @@ function captureCombinedConsent() {
   });
 }
 
-// 3.- Send geolocation and start the ID capture flow);
+// 3.- Send geolocation and start the ID capture flow
 function sendGeolocation() {
   incode.sendGeolocation({ token: incodeSession.token });
   captureIdFrontSide();

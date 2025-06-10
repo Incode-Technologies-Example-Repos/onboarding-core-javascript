@@ -55,11 +55,11 @@ function captureCombinedConsent() {
 // 3.- Send geolocation and start the ID capture flow
 function sendGeolocation() {
   incode.sendGeolocation({ token: incodeSession.token });
-  captureIdFrontSide();
+  captureId();
 }
-
+ß
 // 4.- Capture the ID
-function captureIdFrontSide() {
+function captureId() {
   incode.renderCaptureId(cameraContainer, {
     session: incodeSession, 
     onSuccess: processId,

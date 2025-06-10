@@ -15,7 +15,7 @@ function showError(e = null) {
     console.log(e);
   }
 }
-// 1.- Check if mandatory consent is required and show if it is.
+// 1.- Check if mandatory consent is required. and show it if it is.
 function checkMandatoryConsent() {
   incode.sendFingerprint({ token: incodeSession.token }).then((response) => {
     // Send fingerprint returns a response with the following structure:
@@ -89,10 +89,9 @@ function captureSelfie() {
 
 // 7.- Process the Selfie
 async function processFace() {
-  const results = await incode.processFace({
+  await incode.processFace({
     token: incodeSession.token,
   });
-  console.log("processFace results", results);
   finishOnboarding();
 }
 

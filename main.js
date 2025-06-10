@@ -15,46 +15,59 @@ function showError(e = null) {
     console.log(e);
   }
 }
+// 1.- Check is mandatory consent is required if it is show it.
+function mandatoryConsent() {
+  incode.sendFingerprint({ token: incodeSession.token }).then((response) => {
+    // Send fingerprint returns a response with the following structure:
+    //   {
+    //     "success": true,
+    //     "sessionStatus": "Alive",
+    //     "ipCountry": "UNITED STATES",
+    //     "ipState": "ILLINOIS",
+    //     "showMandatoryConsent": true,
+    //     "regulationType": "US_Illinois"
+    // }
+    // If the response has showMandatoryConsent and is set to true, we need to show the mandatory consent
+    if (response?.showMandatoryConsent) {
+      incode.renderMandatoryConsent(cameraContainer, {
+        token: incodeSession,
+        onSuccess: captureCombinedConsent(),
+        onCancel: () => showError("Mandatory consent was denied"),
+        regulationType: response.regulationType,
+      });
+    } else {
+      captureCombinedConsent();
+    }
+  });
+}
 
+// 2.- Show the combined consent
+//    This consent is created in the dashboard and has to be passed as a parameter
+//    to the renderCombinedConsent function.
 function captureCombinedConsent() {
   incode.renderCombinedConsent(cameraContainer, {
     token: incodeSession,
-    onSuccess: saveDeviceData,
+    onSuccess: sendGeolocation,
     consentId: consentId, // id of a consent created in dashboard
   });
 }
 
-function saveDeviceData() {
+// 3.- Send geolocation and start the ID capture flow);
+function sendGeolocation() {
   incode.sendGeolocation({ token: incodeSession.token });
-  incode.sendFingerprint({ token: incodeSession.token });
   captureIdFrontSide();
 }
 
+// 4.- Capture the ID
 function captureIdFrontSide() {
-  incode.renderCamera("front", cameraContainer, {
-    onSuccess: captureIdBackSide,
+  incode.renderCaptureId(cameraContainer, {
+    session: incodeSession, 
+    onSuccess: processId,
     onError: showError,
-    token: incodeSession,
-    numberOfTries: 3,
-    showTutorial: showTutorialsFlag,
   });
 }
 
-function captureIdBackSide(response) {
-  const { skipBackIdCapture } = response;
-  if (skipBackIdCapture) {
-    processId();
-  } else {
-    incode.renderCamera("back", cameraContainer, {
-      onSuccess: processId,
-      onError: showError,
-      token: incodeSession,
-      numberOfTries: 3,
-      showTutorial: showTutorialsFlag,
-    });
-  }
-}
-
+// 5.- Process the ID
 async function processId() {
   const results = await incode.processId({
     token: incodeSession.token,
@@ -63,9 +76,10 @@ async function processId() {
   captureSelfie();
 }
 
+// 6.- Capture the selfie
 function captureSelfie() {
   incode.renderCamera("selfie", cameraContainer, {
-    onSuccess: finishOnboarding,
+    onSuccess: processFace,
     onError: showError,
     token: incodeSession,
     numberOfTries: 3,
@@ -73,6 +87,16 @@ function captureSelfie() {
   });
 }
 
+// 7.- Process the Selfie
+async function processFace() {
+  const results = await incode.processFace({
+    token: incodeSession.token,
+  });
+  console.log("processFace results", results);
+  finishOnboarding();
+}
+
+// 8.- Finish the onboarding
 function finishOnboarding() {
   fakeBackendFinish(incodeSession.token)
     .then((response) => {
@@ -97,7 +121,9 @@ async function app() {
     incodeSession = await fakeBackendStart();
     // Empty the container and start the flow
     cameraContainer.innerHTML = "";
-    captureCombinedConsent();
+
+    // Start the onboarding flow with mandatory consent
+    mandatoryConsent();
   } catch (e) {
     showError(e);
   }

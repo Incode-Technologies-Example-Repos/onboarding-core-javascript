@@ -17,7 +17,7 @@ function showError(e = null) {
     console.log(e);
   }
 }
-// 1.- Check if mandatory consent is required. and show it if it is.
+// 1.- Check if mandatory consent is required and show it if it is.
 function checkMandatoryConsent() {
   incode.sendFingerprint({ token: incodeSession.token }).then((response) => {
     // Send fingerprint returns a response with the following structure:

@@ -2,7 +2,7 @@ import { fakeBackendStart, fakeBackendFinish } from "./fake_backend";
 const consentId = import.meta.env.VITE_CONSENT_ID;
 
 // Simple configuration flag for V2 components
-const forceV2 = true; // Control whether to force V2 experience for components
+const forceV2 = false; // Control whether to force V2 experience for components
 
 let incode;
 let incodeSession;
@@ -64,14 +64,13 @@ function sendGeolocation() {
 function captureId() {
   incode.renderCaptureId(cameraContainer, {
     session: incodeSession, 
-    onSuccess: captureSelfie, // Skip processId and go directly to captureSelfie
+    onSuccess: processId,
     onError: showError,
-    forceV2: forceV2 // Use the global V2 flag
+    forceIdV2: forceV2 // Use the global V2 flag
   });
 }
 
-// 5.- Process the ID - Currently skipped
-// This step is optional when using renderCaptureId which can process the ID automatically
+// 5.- Process the ID
 async function processId() {
   const results = await incode.processId({
     token: incodeSession.token,

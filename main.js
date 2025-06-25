@@ -72,11 +72,13 @@ function captureId() {
 
 // 5.- Process the ID
 async function processId() {
-  const results = await incode.processId({
-    token: incodeSession.token,
-  });
-  console.log("processId results", results);
-  captureSelfie();
+  return incode.processId({ token: incodeSession.token })
+    .then(() => {
+      captureSelfie();
+    })
+    .catch((error) => {
+      showError(error);
+    });
 }
 
 // 6.- Capture the selfie

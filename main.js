@@ -105,7 +105,7 @@ function finishOnboarding() {
 async function app() {
   try {
     
-    // Translations ranslations if needed
+    // Translations if needed
     // https://developer.incode.com/docs/localization-and-strings#example-translations-files
     // const en = {
     //   common: {

@@ -63,10 +63,10 @@ function sendGeolocation() {
 // 4.- Capture the ID
 function captureId() {
   incode.renderCaptureId(cameraContainer, {
-    session: incodeSession, 
+    session: incodeSession,
     onSuccess: processId,
     onError: showError,
-    forceIdV2: forceV2 // Use the global V2 flag
+    forceIdV2: forceV2, // Use the global V2 flag
   });
 }
 
@@ -87,7 +87,7 @@ function captureSelfie() {
     session: incodeSession,
     onSuccess: finishOnboarding,
     onError: showError,
-    forceV2: forceV2 // Use the global V2 flag
+    forceV2: forceV2, // Use the global V2 flag
   });
 }
 
@@ -106,10 +106,27 @@ function finishOnboarding() {
 
 async function app() {
   try {
+    
+    // Translations if needed
+    // https://developer.incode.com/docs/localization-and-strings#example-translations-files
+    // const en = {
+    //   common: {
+    //     continue: "Continue",
+    //     error: "Error",
+    //     loading: "Loading...",
+    //     pleaseWait: "Please wait...",
+    //     processing: "Processing...",
+    //     // ...
+    //   },
+    // };
+
     const apiURL = import.meta.env.VITE_API_URL;
     incode = window.OnBoarding.create({
       apiURL: apiURL,
+      //translations: en
     });
+
+    await incode.initialize();
 
     // Create the single session
     cameraContainer.innerHTML = "<h1>Creating session...</h1>";
@@ -118,7 +135,7 @@ async function app() {
     cameraContainer.innerHTML = "";
 
     // Start the onboarding flow with mandatory consent
-   checkMandatoryConsent();
+    checkMandatoryConsent();
   } catch (e) {
     showError(e);
   }

@@ -72,24 +72,39 @@ function captureId() {
 
 // 5.- Process the ID
 async function processId() {
-  const results = await incode.processId({
-    token: incodeSession.token,
-  });
-  console.log("processId results", results);
-  captureSelfie();
+  try {
+    const results = await incode.processId({ token: incodeSession.token });
+    console.log("processId results", results);
+    captureSelfie();
+  } catch (error) {
+    showError(error);
+  }
 }
 
 // 6.- Capture the selfie
 function captureSelfie() {
   incode.renderCaptureFace(cameraContainer, {
     session: incodeSession,
-    onSuccess: finishOnboarding,
+    onSuccess: processFace,
     onError: showError,
     forceV2: forceV2, // Use the global V2 flag
   });
 }
 
-// 7.- Finish the onboarding
+// 7.- Process the Face
+async function processFace() {
+  try {
+    const results = await incode.processFace({
+      token: incodeSession.token,
+    });
+    console.log("processFace results", results);
+    finishOnboarding();
+  } catch (error) {
+    showError(error);
+  }
+}
+
+// 8.- Finish the onboarding
 function finishOnboarding() {
   fakeBackendFinish(incodeSession.token)
     .then((response) => {
@@ -104,7 +119,6 @@ function finishOnboarding() {
 
 async function app() {
   try {
-    
     // Translations if needed
     // https://developer.incode.com/docs/localization-and-strings#example-translations-files
     // const en = {

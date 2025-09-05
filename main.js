@@ -4,6 +4,39 @@ const consentId = import.meta.env.VITE_CONSENT_ID;
 // Simple configuration flag for V2 components
 const forceV2 = false; // Control whether to force V2 experience for components
 
+// const UiConfig = {
+//   branding: {
+//     logo: { src: "https://incode.com/wp-content/uploads/2024/03/incode-logo.svg", height: "50px" },
+//     hideFooterBranding: true,
+//   },
+//   theming: {
+//     designTokens: {
+//       colors: {
+//         brand: {
+//           500: "#007aff",
+//         },
+//         positive: {
+//           500: "#5ba66e",
+//         },
+//         negative: {
+//           500: "#b80046",
+//         },
+//       },
+//       button: {
+//         primary: {
+//           surface: { default: "#007aff", hover: "#0056b3" },
+//           text: { default: "#ffffff" },
+//         },
+//       },
+//       typography: {
+//         fontSize: { base: "16px", lg: "1.125rem" },
+//         fontWeight: { medium: "300", bold: "700" },
+//       },
+//     },
+//   },
+//   closeButton: { show: true, position: "right" },
+// };
+
 let incode;
 let incodeSession;
 const cameraContainer = document.getElementById("camera-container");
@@ -67,6 +100,7 @@ function captureId() {
     onSuccess: processId,
     onError: showError,
     forceIdV2: forceV2, // Use the global V2 flag
+    //uiConfig: UiConfig, // Uncomment to apply custom theming
   });
 }
 
@@ -88,6 +122,7 @@ function captureSelfie() {
     onSuccess: processFace,
     onError: showError,
     forceV2: forceV2, // Use the global V2 flag
+    //uiConfig: UiConfig, // Uncomment to apply custom theming
   });
 }
 
